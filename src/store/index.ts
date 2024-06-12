@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import tokens from './tokens';
+import rooms from './rooms';
 
 const reducer = combineReducers({
   tokens,
+  rooms,
 });
 
 export const store = () => configureStore({ reducer });

@@ -3,9 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export enum TokenNames {
   contentAccessToken = 'contentAccessToken',
   contentRefreshToken = 'contentRefreshToken',
+  multiplayerToken = 'multiplayerToken',
 }
 
-type TokenName = TokenNames.contentAccessToken | TokenNames.contentRefreshToken;
+type TokenName =
+  | TokenNames.contentAccessToken
+  | TokenNames.contentRefreshToken
+  | TokenNames.multiplayerToken;
 type GetToken = (tokenName: TokenName) => string | null;
 
 interface ISetTokenPayload {
@@ -22,6 +26,8 @@ const tokensSlice = createSlice({
     [TokenNames.contentRefreshToken]: localStorage.getItem(
       TokenNames.contentRefreshToken
     ) as string | null,
+    [TokenNames.multiplayerToken]:
+      (localStorage.getItem(TokenNames.multiplayerToken) as string) || null,
   },
   selectors: {
     getToken:
@@ -30,7 +36,7 @@ const tokensSlice = createSlice({
         return state[tokenName];
       },
     isAuth: (state): boolean => {
-      return !!state[TokenNames.contentAccessToken];
+      return !!state[TokenNames.multiplayerToken];
     },
   },
   reducers: {
@@ -40,9 +46,13 @@ const tokensSlice = createSlice({
         localStorage.setItem(tokenData.tokenName, tokenData.value);
       });
     },
-    clearTokens(state, { payload }: PayloadAction<TokenName[]>) {
-      payload.forEach((tokenName) => {
+    clearTokens(state, { payload }: PayloadAction<TokenName[] | 'all'>) {
+      const removeTokens =
+        payload === 'all' ? Object.values(TokenNames) : payload;
+
+      removeTokens.forEach((tokenName) => {
         state[tokenName] = null;
+        localStorage.removeItem(tokenName);
       });
     },
   },

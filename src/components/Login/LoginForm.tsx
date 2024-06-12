@@ -16,6 +16,7 @@ const LoginForm: FC = () => {
 
   const [login, isLoading, err] = useFetch(async () => {
     const { accessToken, refreshToken } = await ContentService.login(userData);
+
     dispatch(
       setTokens([
         {
@@ -25,6 +26,15 @@ const LoginForm: FC = () => {
         {
           tokenName: TokenNames.contentRefreshToken,
           value: refreshToken,
+        },
+      ])
+    );
+    const multiplayerToken = await ContentService.getMultiplayerToken();
+    dispatch(
+      setTokens([
+        {
+          tokenName: TokenNames.multiplayerToken,
+          value: multiplayerToken,
         },
       ])
     );

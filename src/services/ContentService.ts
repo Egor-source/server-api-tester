@@ -1,15 +1,21 @@
-import axios from 'axios';
 import env from 'react-dotenv';
 import ILoginData from '../interfaces/Login/ILoginData';
 import IContentUser from '../interfaces/Login/IContentUser';
+import axiosInstance from '../axios';
+import IMultiplayerUser from '../interfaces/IMultiplayerUser';
 
 class ContentService {
-  private static readonly contentServerHost: string = `${env?.CONTENT_SERVER_HOST}:${env?.CONTENT_SERVER_PORT}`;
-
   static async login(data: ILoginData): Promise<IContentUser> {
-    const url: string = `${this.contentServerHost}/api/auth/signin`;
-    const response = await axios.post<IContentUser>(url, data);
+    const url: string = `${env?.CONTENT_SERVER_HOST}/api/auth/signin`;
+    const response = await axiosInstance.post<IContentUser>(url, data);
     return response.data;
+  }
+
+  static async getMultiplayerToken(): Promise<string> {
+    const url: string = `${env?.CONTENT_SERVER_HOST}/api/multiplayer/auth/token`;
+    const response = await axiosInstance.post<IMultiplayerUser>(url);
+
+    return response.data.token;
   }
 }
 

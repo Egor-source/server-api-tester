@@ -1,0 +1,13 @@
+.field-type {
+  color: #888;
+}
+
+.related-schema {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #888;
+
+  &:hover {
+    color: #3399FF;
+  }
+}
