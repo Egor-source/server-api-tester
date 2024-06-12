@@ -1,4 +1,11 @@
-import React, { FC, MouseEvent, useCallback, useEffect, useState } from 'react';
+import React, {
+  FC,
+  MouseEvent,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { StateSchema } from '../../interfaces/Rooms/IRoom';
 import ISchema from '../../interfaces/Rooms/ISchema';
 import Schema from '../Schema/Schema';
@@ -8,91 +15,67 @@ import {
   AccordionSelectCallback,
 } from 'react-bootstrap/AccordionContext';
 import './schemas.scss';
+import SchemaProperty from '../SchemaProperty/SchemaProperty';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+type Schema = {
+  schemaName: string;
+  schemaProps: ReactNode[];
+};
 
 const Schemas: FC<ISchema> = ({ stateSchema, schemaName }) => {
-  const [schemas, setSchemas] = useState<any[]>([]);
+  const [schemas, setSchemas] = useState<Schema[]>([]);
   const [selectedAccordionItems, setSelectedAccordionItems] = useState<
     string[]
   >([]);
+  const navigate = useNavigate();
+  const { hash } = useLocation();
   const generateSchemas = useCallback(
     (schemaTypes: StateSchema, schemaName: string) => {
-      const schema: any = {
+      const schema: Schema = {
         schemaName,
         schemaProps: [],
       };
+
       setSchemas((prev) => {
         const isRepeat = prev.find((sh) => sh.schemaName === schema.schemaName);
         return isRepeat ? prev : [...prev, schema];
       });
-      Object.entries(schemaTypes).forEach(([key, value]) => {
+
+      if (Object.keys(schemaTypes).length === 0) {
+        schema.schemaProps.push(
+          <div key={schemaName} className="text-danger">
+            Схема не заполнена
+          </div>
+        );
+        return;
+      }
+
+      Object.entries(schemaTypes).forEach(([propertyName, value]) => {
         if (typeof value.propertyType === 'string') {
           schema.schemaProps.push(
-            <div key={key} className="pt-2">
-              {key}
-              {value.required ? <span className="text-danger">*</span> : ''}
-              :&nbsp;
-              <span className="field-type">{value.propertyType}</span>
-            </div>
+            <SchemaProperty
+              key={propertyName}
+              propertyType={value.propertyType}
+              propertyName={propertyName}
+              required={value.required}
+              openAccordionItem={openAccordionItem}
+            />
           );
           return;
         }
-        let collectionType;
-        switch (value.collectionType) {
-          case 'array': {
-            collectionType = 'ArraySchema';
-            break;
-          }
-          case 'map': {
-            collectionType = 'MapSchema';
-            break;
-          }
-          case 'set': {
-            collectionType = 'SetSchema';
-            break;
-          }
-          case 'collection': {
-            collectionType = 'CollectionSchema';
-            break;
-          }
-        }
 
         schema.schemaProps.push(
-          <div key={key} className="pt-2">
-            <span>
-              {key}
-              {value.required ? <span className="text-danger">*</span> : ''}
-              :&nbsp;
-              <span className="field-type">
-                {collectionType ? (
-                  <span>
-                    {collectionType}
-                    &lt;
-                    <a
-                      href={`#${value.schemaName}`}
-                      className="related-schema"
-                      onClick={(e) =>
-                        openAccordionItem(e, value.schemaName as string)()
-                      }
-                    >
-                      {value.schemaName}
-                    </a>
-                    &gt;
-                  </span>
-                ) : (
-                  <a
-                    href={`#${value.schemaName}`}
-                    className="related-schema"
-                    onClick={(e) =>
-                      openAccordionItem(e, value.schemaName as string)()
-                    }
-                  >
-                    {value.schemaName}
-                  </a>
-                )}
-              </span>
-            </span>
-          </div>
+          <SchemaProperty
+            key={propertyName}
+            schemaName={value.schemaName}
+            collectionType={value.collectionType}
+            propertyName={propertyName}
+            required={value.required}
+            openAccordionItem={openAccordionItem}
+          />
         );
+
         generateSchemas(
           value.propertyType as StateSchema,
           value.schemaName ?? 'Имя не задано'
@@ -106,12 +89,31 @@ const Schemas: FC<ISchema> = ({ stateSchema, schemaName }) => {
     setSchemas([]);
     if (!stateSchema) return;
     generateSchemas(stateSchema, schemaName ?? 'Имя не задано');
+    if (hash) {
+      setSelectedAccordionItems([hash.replace('#', '')]);
+      setTimeout(() => {
+        const element = document.getElementById(hash.substring(1));
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 0);
+    }
   }, [generateSchemas]);
 
   const onSelectAccordionItem: AccordionSelectCallback = (
     eventKey: AccordionEventKey
   ) => {
-    setSelectedAccordionItems([...(eventKey as string[])]);
+    setSelectedAccordionItems((prev) => {
+      const keys = eventKey as string[];
+      setTimeout(() => {
+        if (prev.length < keys.length) {
+          navigate(`${location.pathname}#${keys[keys.length - 1]}`);
+        } else {
+          navigate(location.pathname);
+        }
+      }, 0);
+      return [...keys];
+    });
   };
 
   const openAccordionItem = (
@@ -129,14 +131,14 @@ const Schemas: FC<ISchema> = ({ stateSchema, schemaName }) => {
       }
       setTimeout(() => {
         if (e.target instanceof HTMLAnchorElement) {
-          window.location.href = e.target.href;
+          location.href = e.target.href;
         }
       }, 450);
     };
   };
 
   return (
-    <div>
+    <div className="py-4">
       <div className="h3">Схемы</div>
       <Accordion
         alwaysOpen
