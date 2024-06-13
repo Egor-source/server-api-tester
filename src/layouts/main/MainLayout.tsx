@@ -32,8 +32,8 @@ const MainLayout: FC = () => {
   }
 
   return (
-    <Row className="h-100 w-100">
-      <Col className="bg-secondary py-3 pe-0" xs={4} lg={2}>
+    <Row className="h-100 w-100 mx-0">
+      <Col className="bg-secondary py-3 px-0" xs={4} lg={2}>
         {rooms.map((room) => (
           <RoomLink
             key={room.roomName}

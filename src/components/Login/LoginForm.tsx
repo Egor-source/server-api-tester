@@ -6,6 +6,7 @@ import ContentService from '../../services/ContentService';
 import Spinner from '../Spinner/Spinner';
 import { setTokens, TokenNames } from '../../store/tokens';
 import { useAppDispatch } from '../../hooks/redux';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm: FC = () => {
   const [userData, setUserData] = useState<ILoginData>({
@@ -13,10 +14,9 @@ const LoginForm: FC = () => {
     password: '',
   });
   const dispatch = useAppDispatch();
-
+  const navigate = useNavigate();
   const [login, isLoading, err] = useFetch(async () => {
     const { accessToken, refreshToken } = await ContentService.login(userData);
-
     dispatch(
       setTokens([
         {
@@ -29,6 +29,8 @@ const LoginForm: FC = () => {
         },
       ])
     );
+    const { id } = await ContentService.createSpace();
+    localStorage.setItem('spaceId', id);
     const multiplayerToken = await ContentService.getMultiplayerToken();
     dispatch(
       setTokens([
@@ -38,6 +40,7 @@ const LoginForm: FC = () => {
         },
       ])
     );
+    navigate('/');
   });
 
   const errorMessage: string | null = useMemo(() => {
@@ -46,7 +49,7 @@ const LoginForm: FC = () => {
       return 'Не верный email или пароль';
     }
 
-    return 'Неизвестная ошибка на сервере';
+    return JSON.stringify(err, null, ' ');
   }, [err]);
 
   const setUserDataByKey = (e: ChangeEvent<HTMLInputElement>, key: string) => {
