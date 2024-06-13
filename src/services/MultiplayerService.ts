@@ -8,6 +8,12 @@ class MultiplayerService {
     const response = await axiosInstance<IRoom[]>(url);
     return response.data;
   }
+
+  static async downloadSchemaFile(schemaName: string): Promise<string> {
+    const url = `${env?.MULTIPLAYER_SERVER_HOST}/server-test-api/`;
+    const response = await axiosInstance.post<string>(url, { schemaName });
+    return response.data;
+  }
 }
 
 export default MultiplayerService;
