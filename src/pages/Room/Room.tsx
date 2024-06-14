@@ -15,7 +15,7 @@ const Room = () => {
   return (
     <div className="d-flex flex-column h-100">
       <div></div>
-      {schemasData && (schemasData.stateSchema || schemasData.schemaName) && (
+      {schemasData && schemasData.stateSchema && schemasData.schemaName && (
         <Schemas
           schemaName={schemasData.schemaName}
           stateSchema={schemasData.stateSchema}

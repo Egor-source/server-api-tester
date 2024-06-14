@@ -9,10 +9,19 @@ class MultiplayerService {
     return response.data;
   }
 
-  static async downloadSchemaFile(schemaName: string): Promise<string> {
+  static async downloadSchemaFiles(
+    stateSchemaName: string,
+    schemaName?: string
+  ): Promise<Blob> {
     const url = `${env?.MULTIPLAYER_SERVER_HOST}/server-test-api/`;
-    const response = await axiosInstance.post<string>(url, { schemaName });
-    return response.data;
+    const response = await axiosInstance.post<Blob>(
+      url,
+      { stateSchemaName, schemaName },
+      {
+        responseType: 'blob',
+      }
+    );
+    return new Blob([response.data], { type: 'application/zip' });
   }
 }
 

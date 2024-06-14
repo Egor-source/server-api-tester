@@ -2,24 +2,21 @@ import React, { FC, ReactNode, MouseEvent, useMemo } from 'react';
 import { Accordion, Spinner } from 'react-bootstrap';
 import useFetch from '../../hooks/useFetch';
 import MultiplayerService from '../../services/MultiplayerService';
+import { saveAs } from 'file-saver';
 
 interface ISchema {
+  stateSchemaName: string;
   schemaName: string;
   children: ReactNode;
 }
 
-const Schema: FC<ISchema> = ({ schemaName, children }) => {
+const Schema: FC<ISchema> = ({ schemaName, children, stateSchemaName }) => {
   const [loadSchema, isLoading, err] = useFetch(async () => {
-    const schemaFile = await MultiplayerService.downloadSchemaFile(schemaName);
-    const blob = new Blob([schemaFile], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${schemaName}.ts`;
-    a.click();
-
-    URL.revokeObjectURL(url);
+    const blob = await MultiplayerService.downloadSchemaFiles(
+      stateSchemaName,
+      schemaName
+    );
+    saveAs(blob);
   });
 
   const downloadSchema = (e: MouseEvent<HTMLElement>) => {

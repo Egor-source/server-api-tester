@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { StateSchema } from '../../interfaces/Rooms/IRoom';
@@ -17,6 +18,10 @@ import {
 import './schemas.scss';
 import SchemaProperty from '../SchemaProperty/SchemaProperty';
 import { useLocation, useNavigate } from 'react-router-dom';
+import useFetch from '../../hooks/useFetch';
+import MultiplayerService from '../../services/MultiplayerService';
+import { saveAs } from 'file-saver';
+import Spinner from '../Spinner/Spinner';
 
 type Schema = {
   schemaName: string;
@@ -75,11 +80,8 @@ const Schemas: FC<ISchema> = ({ stateSchema, schemaName }) => {
             openAccordionItem={openAccordionItem}
           />
         );
-
-        generateSchemas(
-          value.propertyType as StateSchema,
-          value.schemaName ?? 'Имя не задано'
-        );
+        if (!value.schemaName) return;
+        generateSchemas(value.propertyType, value.schemaName);
       });
     },
     [stateSchema]
@@ -87,8 +89,8 @@ const Schemas: FC<ISchema> = ({ stateSchema, schemaName }) => {
 
   useEffect(() => {
     setSchemas([]);
-    if (!stateSchema) return;
-    generateSchemas(stateSchema, schemaName ?? 'Имя не задано');
+    if (!stateSchema || !schemaName) return;
+    generateSchemas(stateSchema, schemaName);
     if (hash) {
       setSelectedAccordionItems([hash.replace('#', '')]);
       setTimeout(() => {
@@ -136,17 +138,47 @@ const Schemas: FC<ISchema> = ({ stateSchema, schemaName }) => {
       }, 450);
     };
   };
+  const [loadSchema, isLoading, err] = useFetch(async () => {
+    const blob = await MultiplayerService.downloadSchemaFiles(
+      schemaName as string
+    );
+    saveAs(blob);
+  });
+
+  const downloadSchema = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    loadSchema();
+  };
+
+  const downloadIcon = useMemo(() => {
+    if (isLoading) return <Spinner />;
+    if (err) return <div className="text-danger">Ошибка при скачивании</div>;
+    return (
+      <i
+        onClick={downloadSchema}
+        className="bi bi-cloud-arrow-down"
+        style={{ fontSize: 24 }}
+      />
+    );
+  }, [isLoading, err]);
 
   return (
     <div className="py-4">
-      <div className="h3">Схемы</div>
+      <div className="d-flex justify-content-between align-items-center">
+        <div className="h3">Схемы</div>
+        {downloadIcon}
+      </div>
       <Accordion
         alwaysOpen
         activeKey={selectedAccordionItems}
         onSelect={onSelectAccordionItem}
       >
         {schemas.map((schema) => (
-          <Schema key={schema.schemaName} schemaName={schema.schemaName}>
+          <Schema
+            key={schema.schemaName}
+            schemaName={schema.schemaName}
+            stateSchemaName={schemaName as string}
+          >
             <Accordion.Body>{schema.schemaProps}</Accordion.Body>
           </Schema>
         ))}
