@@ -29,8 +29,7 @@ const LoginForm: FC = () => {
         },
       ])
     );
-    const { id } = await ContentService.createSpace();
-    localStorage.setItem('spaceId', id);
+
     const multiplayerToken = await ContentService.getMultiplayerToken();
     dispatch(
       setTokens([

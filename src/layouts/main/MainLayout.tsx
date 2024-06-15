@@ -4,17 +4,17 @@ import { Col, Row } from 'react-bootstrap';
 import useFetch from '../../hooks/useFetch';
 import MultiplayerService from '../../services/MultiplayerService';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { getRoomData, setRooms } from '../../store/rooms';
+import { getRoomTypeData, setRoomsTypes } from '../../store/roomsTypes';
 import { clearTokens } from '../../store/tokens';
-import RoomLink from '../../components/Room/RoomLink';
+import RoomLink from '../../components/RoomLink/RoomLink';
 import Spinner from '../../components/Spinner/Spinner';
 
 const MainLayout: FC = () => {
   const dispatch = useAppDispatch();
-  const rooms = useAppSelector(getRoomData);
+  const rooms = useAppSelector(getRoomTypeData);
   const [loadRooms, isLoading, err] = useFetch(async () => {
     const rooms = await MultiplayerService.getRooms();
-    dispatch(setRooms(rooms));
+    dispatch(setRoomsTypes(rooms));
   });
 
   useEffect(() => {

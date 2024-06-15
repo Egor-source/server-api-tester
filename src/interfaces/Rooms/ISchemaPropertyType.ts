@@ -1,4 +1,4 @@
-import { StateSchema } from './IRoom';
+import { StateSchema } from './IRoomType';
 
 interface ISchemaPropertyType {
   schemaName?: string;

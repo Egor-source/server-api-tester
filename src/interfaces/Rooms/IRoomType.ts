@@ -4,11 +4,11 @@ export type StateSchema = {
   [key: string]: ISchemaPropertyType;
 };
 
-interface IRoom {
+interface IRoomType {
   roomName: string;
   description?: string;
   schemaName?: string;
   stateSchema?: StateSchema;
 }
 
-export default IRoom;
+export default IRoomType;

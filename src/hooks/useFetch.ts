@@ -1,16 +1,21 @@
 import { useState } from 'react';
 
-type Callback = () => Promise<void>;
+type Callback = (...args: any[]) => Promise<void>;
 
-type FetchReturn = [() => Promise<void>, boolean, any | null];
+type FetchReturn = [
+  (...args: any[]) => Promise<void>,
+  boolean,
+  any | null,
+  () => void,
+];
 
 const useFetch = (callback: Callback): FetchReturn => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<any | null>(null);
-  const fetching = async () => {
+  const fetching = async (...args: any[]) => {
     try {
       setIsLoading(true);
-      await callback();
+      await callback(...args);
     } catch (e) {
       setError(e);
     } finally {
@@ -18,7 +23,14 @@ const useFetch = (callback: Callback): FetchReturn => {
     }
   };
 
-  return [fetching, isLoading, error];
+  return [
+    fetching,
+    isLoading,
+    error,
+    () => {
+      setError(null);
+    },
+  ];
 };
 
 export default useFetch;

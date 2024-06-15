@@ -1,5 +1,5 @@
-import IRoom from './IRoom';
+import IRoomType from './IRoomType';
 
-interface ISchema extends Omit<IRoom, 'roomName' | 'description'> {}
+interface ISchema extends Omit<IRoomType, 'roomName' | 'description'> {}
 
 export default ISchema;

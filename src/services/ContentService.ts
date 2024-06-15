@@ -17,14 +17,6 @@ class ContentService {
 
     return response.data.token;
   }
-
-  static async createSpace() {
-    const url: string = `${env?.CONTENT_SERVER_HOST}/api/admin/game-spaces`;
-    const response = await axiosInstance.post<{ id: string }>(url, {
-      name: Date.now().toString(),
-    });
-    return response.data;
-  }
 }
 
 export default ContentService;

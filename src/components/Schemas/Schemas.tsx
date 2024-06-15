@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { StateSchema } from '../../interfaces/Rooms/IRoom';
+import { StateSchema } from '../../interfaces/Rooms/IRoomType';
 import ISchema from '../../interfaces/Rooms/ISchema';
 import Schema from '../Schema/Schema';
 import { Accordion } from 'react-bootstrap';
@@ -157,14 +157,14 @@ const Schemas: FC<ISchema> = ({ stateSchema, schemaName }) => {
       <i
         onClick={downloadSchema}
         className="bi bi-cloud-arrow-down"
-        style={{ fontSize: 24 }}
+        style={{ fontSize: 24, cursor: 'pointer' }}
       />
     );
   }, [isLoading, err]);
 
   return (
     <div className="py-4">
-      <div className="d-flex justify-content-between align-items-center">
+      <div className="d-flex gap-1 align-items-center">
         <div className="h3">Схемы</div>
         {downloadIcon}
       </div>

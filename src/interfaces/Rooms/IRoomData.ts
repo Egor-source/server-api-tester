@@ -1,5 +1,5 @@
-import IRoom from './IRoom';
+import IRoomType from './IRoomType';
 
-interface IRoomData extends Omit<IRoom, 'schemaName' | 'stateSchema'> {}
+interface IRoomData extends Omit<IRoomType, 'schemaName' | 'stateSchema'> {}
 
 export default IRoomData;

@@ -3,10 +3,10 @@ import IRoomData from '../../interfaces/Rooms/IRoomData';
 import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks/redux';
-import { getSelectedRoom } from '../../store/rooms';
+import { getSelectedRoomType } from '../../store/roomsTypes';
 
 const RoomLink: FC<IRoomData> = ({ roomName, description }) => {
-  const selectedRoom = useAppSelector(getSelectedRoom);
+  const selectedRoom = useAppSelector(getSelectedRoomType);
   const isSelectedRoom = selectedRoom && selectedRoom === roomName;
 
   if (description) {
