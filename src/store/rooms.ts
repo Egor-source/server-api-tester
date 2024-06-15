@@ -30,6 +30,11 @@ interface IGetEventByNamePayload {
   eventName: string;
 }
 
+interface IDeleteRoomPayload {
+  roomType: string;
+  roomId: string;
+}
+
 const roomsSlice = createSlice({
   name: 'rooms',
   initialState: {
@@ -65,10 +70,16 @@ const roomsSlice = createSlice({
     setRoomEvents(state, { payload }: PayloadAction<ISetRoomsEventsPayload>) {
       state.roomsEvents[payload.roomType] = payload.events;
     },
+    deleteRoom(state, { payload }: PayloadAction<IDeleteRoomPayload>) {
+      state.rooms[payload.roomType] = state.rooms[payload.roomType].filter(
+        (room) => room.id !== payload.roomId
+      );
+    },
   },
 });
 
-export const { setRooms, addRoom, setRoomEvents } = roomsSlice.actions;
+export const { setRooms, addRoom, setRoomEvents, deleteRoom } =
+  roomsSlice.actions;
 export const { getRoomsByType, getEventsByType, getEventByName } =
   roomsSlice.selectors;
 

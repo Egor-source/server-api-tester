@@ -21,6 +21,7 @@ import useModal from '../../hooks/useModal';
 import CreateEventModal from '../../components/CreateEventModal/CreateEventModal';
 import IModal from '../../interfaces/IModal';
 import ColyseusService from '../../services/ColyseusService';
+import RoomTableRow from '../../components/RoomTableRow/RoomTableRow';
 
 const Rooms = () => {
   const dispatch = useAppDispatch();
@@ -92,16 +93,12 @@ const Rooms = () => {
             <tr>
               <th>Room id</th>
               <th>Session id</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {rooms?.length > 0 ? (
-              rooms.map((room) => (
-                <tr key={room.id}>
-                  <td>{room.id}</td>
-                  <td>{room.sessionId}</td>
-                </tr>
-              ))
+              rooms.map((room) => <RoomTableRow key={room.id} room={room} />)
             ) : (
               <tr>
                 <td>

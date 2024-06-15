@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import Main from '../pages/Main/Main';
 import { Navigate, useRoutes } from 'react-router-dom';
-import Rooms from '../pages/Room/Rooms';
+import Rooms from '../pages/Rooms/Rooms';
 
 export enum MainPaths {
   main = '/',

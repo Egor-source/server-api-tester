@@ -1,0 +1,11 @@
+.dropdown-button {
+  .dropdown-toggle {
+    background: transparent;
+    border: none;
+    color: #000;
+
+    &:after {
+      content: none;
+    }
+  }
+}
