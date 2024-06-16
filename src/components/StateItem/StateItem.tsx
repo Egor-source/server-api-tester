@@ -44,11 +44,11 @@ const StateItem: FC<ISetItem> = ({ stateItem, isCollapsed }) => {
 
   const getStateItemProps = () => {
     if (Array.isArray(stateItem)) {
-      return stateItem.map((item) => {
+      return stateItem.map((item, index) => {
         return typeof item === 'object' ? (
-          <StateItem key={item} stateItem={item} />
+          <StateItem key={index} stateItem={item} />
         ) : (
-          <div key={item}>{getValueString(item)}</div>
+          <div key={index}>{getValueString(item)}</div>
         );
       });
     } else {

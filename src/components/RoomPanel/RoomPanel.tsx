@@ -24,7 +24,7 @@ const RoomPanel: FC<IRoomPanel> = ({
       style={visible ? { display: 'block' } : { display: 'none' }}
     >
       <div
-        className="d-flex align-items-center gap-1 position-sticky top-0 "
+        className="d-flex align-items-center gap-1 position-sticky top-0 mb-3"
         style={{ background: '#fff' }}
       >
         <div className="h4 mb-0">{label}</div>

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { getRoomByRoomId } from '../../store/rooms';
 import RoomPanel from '../../components/RoomPanel/RoomPanel';
 import StateItem from '../../components/StateItem/StateItem';
+import Events from '../../components/Events/Events';
 
 const Room = () => {
   const { roomType, roomId } = useParams();
@@ -12,6 +13,7 @@ const Room = () => {
     left: false,
     right: false,
   });
+
   const navigator = useNavigate();
   const room = useSelector(getRoomByRoomId)({
     roomType: roomType as string,
@@ -52,30 +54,27 @@ const Room = () => {
         <div className="h3">Комната {roomId}</div>
         <Button onClick={onClose}>X</Button>
       </div>
-      {state ? (
-        <Row className="flex-grow-1 overflow-hidden">
-          <RoomPanel
-            label="Стейт"
-            toggleFullscreen={toggleFullscreen}
-            direction="left"
-            fullscreen={fullscreen.left}
-            visible={!fullscreen.right}
-          >
-            <StateItem stateItem={state} isCollapsed={false} />
-          </RoomPanel>
-          <RoomPanel
-            label="События"
-            toggleFullscreen={toggleFullscreen}
-            direction="right"
-            fullscreen={fullscreen.right}
-            visible={!fullscreen.left}
-          >
-            <div></div>
-          </RoomPanel>
-        </Row>
-      ) : (
-        <div className="text-danger">У комнаты нет стейта</div>
-      )}
+
+      <Row className="flex-grow-1 overflow-hidden">
+        <RoomPanel
+          label="Стейт"
+          toggleFullscreen={toggleFullscreen}
+          direction="left"
+          fullscreen={fullscreen.left}
+          visible={!fullscreen.right}
+        >
+          <StateItem stateItem={state} isCollapsed={false} />
+        </RoomPanel>
+        <RoomPanel
+          label="События"
+          toggleFullscreen={toggleFullscreen}
+          direction="right"
+          fullscreen={fullscreen.right}
+          visible={!fullscreen.left}
+        >
+          <Events />
+        </RoomPanel>
+      </Row>
     </div>
   );
 };
