@@ -30,7 +30,7 @@ interface IGetEventByNamePayload {
   eventName: string;
 }
 
-interface IDeleteRoomPayload {
+interface IRoomPayload {
   roomType: string;
   roomId: string;
 }
@@ -45,6 +45,11 @@ const roomsSlice = createSlice({
     getRoomsByType(state) {
       return (roomType: string): Room[] => {
         return state.rooms[roomType];
+      };
+    },
+    getRoomByRoomId(state) {
+      return ({ roomType, roomId }: IRoomPayload) => {
+        return state.rooms[roomType]?.find((room) => room.id === roomId);
       };
     },
     getEventsByType(state) {
@@ -70,7 +75,7 @@ const roomsSlice = createSlice({
     setRoomEvents(state, { payload }: PayloadAction<ISetRoomsEventsPayload>) {
       state.roomsEvents[payload.roomType] = payload.events;
     },
-    deleteRoom(state, { payload }: PayloadAction<IDeleteRoomPayload>) {
+    deleteRoom(state, { payload }: PayloadAction<IRoomPayload>) {
       state.rooms[payload.roomType] = state.rooms[payload.roomType].filter(
         (room) => room.id !== payload.roomId
       );
@@ -80,7 +85,11 @@ const roomsSlice = createSlice({
 
 export const { setRooms, addRoom, setRoomEvents, deleteRoom } =
   roomsSlice.actions;
-export const { getRoomsByType, getEventsByType, getEventByName } =
-  roomsSlice.selectors;
+export const {
+  getRoomsByType,
+  getEventsByType,
+  getEventByName,
+  getRoomByRoomId,
+} = roomsSlice.selectors;
 
 export default roomsSlice.reducer;
