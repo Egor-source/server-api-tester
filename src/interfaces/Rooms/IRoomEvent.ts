@@ -1,10 +1,12 @@
-export type ParameterType = string | number;
+export type ParameterType = string | number | boolean | object;
+
+export type BaseTypes = 'string' | 'number' | 'object' | 'boolean';
 
 export interface IRequestParameter {
   name: string;
   required: boolean;
   defaultValue?: 'token';
-  type: 'string' | 'number';
+  types: BaseTypes | BaseTypes[];
 }
 
 interface IRoomEvent {

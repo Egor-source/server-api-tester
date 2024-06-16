@@ -75,9 +75,9 @@ const Event: FC<IEvent> = ({ event }) => {
 
   const onSendMessage = async () => {
     clearErr();
-    setReturnedValues(null);
     setValidationError('');
     if (isValid()) {
+      setReturnedValues(null);
       await sendMessage();
       setValues(
         params.reduce(
@@ -110,7 +110,7 @@ const Event: FC<IEvent> = ({ event }) => {
                 key={param.name}
                 name={param.name}
                 required={param.required}
-                type={param.type}
+                types={param.types}
                 defaultValue={param.defaultValue}
                 onChange={onChange}
               />

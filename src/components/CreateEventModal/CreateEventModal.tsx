@@ -44,7 +44,11 @@ const CreateEventModal: FC<ICreateEventModal> = ({
   const isValid = () => {
     const requiredParams = paramas.filter((param) => param.required);
     return requiredParams.reduce((acc, param) => {
-      if (!values[param.name]) {
+      if (
+        !values[param.name] &&
+        typeof values[param.name] !== 'boolean' &&
+        values[param.name] !== 0
+      ) {
         acc = false;
       }
       return acc;
@@ -60,6 +64,7 @@ const CreateEventModal: FC<ICreateEventModal> = ({
   };
 
   const onChange = (paramName: string, newValue: ParameterType) => {
+    console.log(321);
     setValues((prev) => ({
       ...prev,
       [paramName]: newValue,
@@ -79,7 +84,7 @@ const CreateEventModal: FC<ICreateEventModal> = ({
               key={param.name}
               name={param.name}
               required={param.required}
-              type={param.type}
+              types={param.types}
               defaultValue={param.defaultValue}
               onChange={onChange}
             />
