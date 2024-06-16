@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import ReactDOM from 'react-dom/client';
-import IModal from '../interfaces/IModal';
 import { Provider } from 'react-redux';
 import { store } from '../index';
+import IModal from '../interfaces/IModal';
 
-interface IModalOptions {
-  component: FC<IModal>;
+interface IModalOptions<T extends IModal> {
+  component: FC<T>;
   props?: any;
 }
 
@@ -17,7 +17,10 @@ interface IModalCallbacks {
   dismiss?: ModalCallback;
 }
 
-const useModal = (options: IModalOptions, callbacks?: IModalCallbacks) => {
+function useModal<T extends IModal>(
+  options: IModalOptions<T>,
+  callbacks?: IModalCallbacks
+) {
   const modal = ReactDOM.createRoot(
     document.querySelector('#modal') as HTMLElement
   );
@@ -51,6 +54,6 @@ const useModal = (options: IModalOptions, callbacks?: IModalCallbacks) => {
   });
 
   modal.render(<Provider store={store}>{modalComponent}</Provider>);
-};
+}
 
 export default useModal;

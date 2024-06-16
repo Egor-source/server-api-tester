@@ -13,7 +13,7 @@ import {
 } from '../../interfaces/Rooms/IRoomEvent';
 import RequestParameter from '../RequestParameter/RequestParameter';
 
-interface ICreateEventModal extends IModal {
+export interface ICreateEventModal extends IModal {
   roomType: string;
   eventName: string;
 }

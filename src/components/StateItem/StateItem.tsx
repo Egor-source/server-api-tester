@@ -62,7 +62,7 @@ const StateItem: FC<ISetItem> = ({ stateItem, isCollapsed }) => {
           <div key={key} className="text-nowrap">
             <span style={{ color: '#001080' }}>{key}</span>:{' '}
             <span
-              className="text-wrap"
+              className="text-wrap text-break"
               style={{ color: getValueColorByType(value) }}
             >
               {getValueString(value)}

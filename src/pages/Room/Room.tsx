@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { getRoomByRoomId } from '../../store/rooms';
+import RoomPanel from '../../components/RoomPanel/RoomPanel';
 import StateItem from '../../components/StateItem/StateItem';
 
 const Room = () => {
@@ -53,54 +54,24 @@ const Room = () => {
       </div>
       {state ? (
         <Row className="flex-grow-1 overflow-hidden">
-          {!fullscreen.right && (
-            <Col
-              className="h-100 overflow-auto pb-2"
-              style={{ borderRight: '1px solid #000' }}
-            >
-              <div
-                className="d-flex align-items-center gap-1 position-sticky top-0 "
-                style={{ background: '#fff' }}
-              >
-                <div className="h4 mb-0">Стейт</div>
-                <Button
-                  className="btn-light text-nowrap border-0"
-                  style={{ background: '#fff' }}
-                  onClick={() => toggleFullscreen('left')}
-                  size="sm"
-                >
-                  {fullscreen.left ? (
-                    <i className="bi bi-chevron-double-left"></i>
-                  ) : (
-                    <i className="bi bi-chevron-double-right"></i>
-                  )}
-                </Button>
-              </div>
-              <StateItem stateItem={state} isCollapsed={false} />
-            </Col>
-          )}
-          {!fullscreen.left && (
-            <Col className="h-100 overflow-auto">
-              <div
-                className="d-flex align-items-center gap-1 position-sticky top-0 "
-                style={{ background: '#fff' }}
-              >
-                <div className="h4 mb-0">События</div>
-                <Button
-                  className="btn-light text-nowrap border-0"
-                  style={{ background: '#fff' }}
-                  onClick={() => toggleFullscreen('right')}
-                  size="sm"
-                >
-                  {fullscreen.right ? (
-                    <i className="bi bi-chevron-double-right"></i>
-                  ) : (
-                    <i className="bi bi-chevron-double-left"></i>
-                  )}
-                </Button>
-              </div>
-            </Col>
-          )}
+          <RoomPanel
+            label="Стейт"
+            toggleFullscreen={toggleFullscreen}
+            direction="left"
+            fullscreen={fullscreen.left}
+            visible={!fullscreen.right}
+          >
+            <StateItem stateItem={state} isCollapsed={false} />
+          </RoomPanel>
+          <RoomPanel
+            label="События"
+            toggleFullscreen={toggleFullscreen}
+            direction="right"
+            fullscreen={fullscreen.right}
+            visible={!fullscreen.left}
+          >
+            <div></div>
+          </RoomPanel>
         </Row>
       ) : (
         <div className="text-danger">У комнаты нет стейта</div>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
@@ -18,10 +18,11 @@ import useFetch from '../../hooks/useFetch';
 import MultiplayerService from '../../services/MultiplayerService';
 import Spinner from '../../components/Spinner/Spinner';
 import useModal from '../../hooks/useModal';
-import CreateEventModal from '../../components/CreateEventModal/CreateEventModal';
-import IModal from '../../interfaces/IModal';
 import ColyseusService from '../../services/ColyseusService';
 import RoomTableRow from '../../components/RoomTableRow/RoomTableRow';
+import CreateEventModal, {
+  ICreateEventModal,
+} from '../../components/CreateEventModal/CreateEventModal';
 
 const Rooms = () => {
   const dispatch = useAppDispatch();
@@ -61,9 +62,9 @@ const Rooms = () => {
   const createRoom = () => {
     const createEvent = roomEvents.find((event) => event.name === '$onCreate');
     if (createEvent?.requestParameters) {
-      useModal(
+      useModal<ICreateEventModal>(
         {
-          component: CreateEventModal as FC<IModal>,
+          component: CreateEventModal,
           props: {
             roomType,
             eventName: '$onCreate',
