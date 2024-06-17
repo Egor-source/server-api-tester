@@ -20,9 +20,7 @@ import Spinner from '../../components/Spinner/Spinner';
 import useModal from '../../hooks/useModal';
 import ColyseusService from '../../services/ColyseusService';
 import RoomTableRow from '../../components/RoomTableRow/RoomTableRow';
-import CreateEventModal, {
-  ICreateEventModal,
-} from '../../components/CreateEventModal/CreateEventModal';
+import CreateEventModal from '../../components/CreateEventModal/CreateEventModal';
 
 const Rooms = () => {
   const dispatch = useAppDispatch();
@@ -62,11 +60,11 @@ const Rooms = () => {
   const createRoom = () => {
     const createEvent = roomEvents.find((event) => event.name === '$onCreate');
     if (createEvent?.requestParameters) {
-      useModal<ICreateEventModal>(
+      useModal(
         {
           component: CreateEventModal,
           props: {
-            roomType,
+            roomType: roomType as string,
             eventName: '$onCreate',
           },
         },
@@ -112,6 +110,7 @@ const Rooms = () => {
                   )}{' '}
                 </td>
                 <td></td>
+                <td></td>
               </tr>
             )}
             {isCreateRoomLoading && (
@@ -119,6 +118,7 @@ const Rooms = () => {
                 <td>
                   <Spinner />
                 </td>
+                <td></td>
                 <td></td>
               </tr>
             )}

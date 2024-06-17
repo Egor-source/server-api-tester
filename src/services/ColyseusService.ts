@@ -15,6 +15,10 @@ class ColyseusService {
     return await colyseusClient.create(roomType, options);
   }
 
+  static async joinRoom({ roomType, options }: ICreateRoomPayload) {
+    await colyseusClient.join(roomType, options);
+  }
+
   static async sendMessage(
     room: Room,
     event: IRoomEvent,

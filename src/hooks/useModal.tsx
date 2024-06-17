@@ -6,7 +6,7 @@ import IModal from '../interfaces/IModal';
 
 interface IModalOptions<T extends IModal> {
   component: FC<T>;
-  props?: any;
+  props?: Omit<T, 'ok' | 'cancel' | 'dismiss'>;
 }
 
 export type ModalCallback = (...args: any[]) => void;
@@ -45,12 +45,16 @@ function useModal<T extends IModal>(
       callbacks?.cancel(...args);
     }
   };
-  //eslint-disable-next-line
-  const modalComponent = React.createElement(options.component, {
+  const props = {
     cancel,
     ok,
     dismiss,
     ...options.props,
+  } as T;
+
+  //eslint-disable-next-line
+  const modalComponent = React.createElement(options.component, {
+    ...props,
   });
 
   modal.render(<Provider store={store}>{modalComponent}</Provider>);
