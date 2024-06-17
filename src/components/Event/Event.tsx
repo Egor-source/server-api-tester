@@ -66,7 +66,11 @@ const Event: FC<IEvent> = ({ event }) => {
   const isValid = () => {
     const requiredParams = params.filter((param) => param.required);
     return requiredParams.reduce((acc, param) => {
-      if (!values[param.name]) {
+      if (
+        !values[param.name] &&
+        typeof values[param.name] !== 'boolean' &&
+        values[param.name] !== 0
+      ) {
         acc = false;
       }
       return acc;
