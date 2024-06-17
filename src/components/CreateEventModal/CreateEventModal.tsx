@@ -64,7 +64,6 @@ const CreateEventModal: FC<ICreateEventModal> = ({
   };
 
   const onChange = (paramName: string, newValue: ParameterType) => {
-    console.log(321);
     setValues((prev) => ({
       ...prev,
       [paramName]: newValue,

@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { getRoomByRoomId } from '../../store/rooms';
+import { deleteRoom, getRoomByRoomId } from '../../store/rooms';
 import RoomPanel from '../../components/RoomPanel/RoomPanel';
 import StateItem from '../../components/StateItem/StateItem';
 import Events from '../../components/Events/Events';
+import { useAppDispatch } from '../../hooks/redux';
 
 const Room = () => {
   const { roomType, roomId } = useParams();
@@ -13,7 +14,7 @@ const Room = () => {
     left: false,
     right: false,
   });
-
+  const dispatch = useAppDispatch();
   const navigator = useNavigate();
   const room = useSelector(getRoomByRoomId)({
     roomType: roomType as string,
@@ -29,6 +30,12 @@ const Room = () => {
       onClose();
       return;
     }
+    room.onLeave(() => {
+      dispatch(
+        deleteRoom({ roomType: roomType as string, roomId: roomId as string })
+      );
+      onClose();
+    });
     room?.onStateChange((data: any) => {
       const parsedData = JSON.parse(JSON.stringify(data));
       setState(parsedData);
