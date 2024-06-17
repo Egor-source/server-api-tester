@@ -1,6 +1,11 @@
 export type ParameterType = string | number | boolean | object;
 
-export type BaseTypes = 'string' | 'number' | 'object' | 'boolean';
+export type BaseTypes =
+  | 'string'
+  | 'number'
+  | 'object'
+  | 'boolean'
+  | { type: 'selector'; options: string[] };
 
 export interface IRequestParameter {
   name: string;

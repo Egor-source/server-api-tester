@@ -11,6 +11,7 @@ import StringRequestParameter from './Types/StringRequestParameter/StringRequest
 import NumberRequestParameter from './Types/NumberRequestParameter/NumberRequestParameter';
 import BooleanRequestParameter from './Types/BooleanRequestParameter/BooleanRequestParameter';
 import ObjectRequestParameter from './Types/ObjectRequestParameter/ObjectRequestParameter';
+import SelectRequestParameter from './Types/SelectRequestParameter/SelectRequestParameter';
 
 interface IParam extends IRequestParameter {
   value: ParameterType;
@@ -84,6 +85,15 @@ const RequestParameter: FC<IParam> = ({
           />
         );
       }
+      default: {
+        return (
+          <SelectRequestParameter
+            onChange={change}
+            value={value}
+            options={selectedType.options}
+          />
+        );
+      }
     }
   }, [selectedType, value]);
 
@@ -107,11 +117,18 @@ const RequestParameter: FC<IParam> = ({
           <Form.Select
             onChange={onChangeSelectedType}
             size="sm"
-            value={selectedType}
+            value={
+              typeof selectedType === 'object'
+                ? selectedType.type
+                : selectedType
+            }
           >
             {types.map((type) => (
-              <option key={type} value={type}>
-                {type}
+              <option
+                key={typeof type === 'object' ? type.type : type}
+                value={typeof type === 'object' ? type.type : type}
+              >
+                {typeof type === 'object' ? type.type : type}
               </option>
             ))}
           </Form.Select>
